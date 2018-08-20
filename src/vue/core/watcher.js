@@ -1,4 +1,5 @@
 import Dep from './dep'
+import queue from './queue'
 
 let watcherId = 0;
 export default class Watcher {
@@ -47,12 +48,12 @@ export default class Watcher {
       console.log('computed更新了');
       this.dep.notify();
     } else if (this.expression) {
-      console.log('watcher更新了:'+this.expression);
+      console.log('watcher更新了:' + this.expression);
       let oldValue = this.value;
       let newValue = vm[this.expression]
       this.fn.call(vm, oldValue, newValue)
     } else {
-      this.getValue();
+      queue(this);
     }
   }
 

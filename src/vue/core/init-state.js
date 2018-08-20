@@ -2,8 +2,6 @@ import {isArray, defineReactive, proxy} from '../utils'
 import {isObject} from '../utils'
 import Watcher from './watcher'
 import Dep from './dep'
-let noop = () => {
-}
 export default function (vm) {
   vm._watchers = [];
   const options = vm.$options;
