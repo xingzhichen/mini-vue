@@ -14,16 +14,19 @@ export default class Watcher {
     if (isComputed) {
       this.dep = new Dep();
       this.initComputed()
-    }
-    if (this.expression) {
-      this.initWatch()
+    }else {
+      this.init()
     }
   }
 
-  initWatch() {
+  init() {
     const vm = this.vm;
     Dep.setTarget(this);
-    this.value = vm[this.expression]
+    if(this.expression){
+      this.value = vm[this.expression]
+    }else {
+      this.fn.call(vm)
+    }
     Dep.setTarget(null);
     // }
 
