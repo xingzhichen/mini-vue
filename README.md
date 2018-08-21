@@ -8,9 +8,9 @@
 2. 数据劫持
 3. watcher observe dep等
 4. ast
+5.render函数
 
 待完成
-1.render函数
 2. vdom
 3. diff
 
