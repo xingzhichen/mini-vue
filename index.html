@@ -17,19 +17,10 @@
 </head>
 <body>
 <div id="app">
-  <a href="xxx"></a>
-  <a :href="src"></a>
+<p v-text="src"></p>
   <div v-for="(item,idx) in list" :key='idx' v-show="false" @click="select(item)">
     <p>{{item}}-{{idx}}</p>
   </div>
-  <input type="text" v-modal="inputValue" disabled>
-  <input type="text" :value="value">
-  <section>
-    <div v-if="status">dd</div>
-    <div v-else>dd</div>
-  </section>
-  <div v-text="value"></div>
-  <div v-html="inputValue"></div>
 
 </div>
 </body>

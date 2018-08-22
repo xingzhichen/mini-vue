@@ -67,6 +67,7 @@ export function translateToAst(template) {
         let parseResult = parseText(text)
         if (parseResult) {
           currentParent.children.push({
+            expression: parseResult,
             type: 2,
             text: parseResult
           })
@@ -190,14 +191,15 @@ function parseText(text) {
   let match, index, last;
   while (match = tagRE.exec(text)) {
     last = match.index;
-    tokens.push(text.slice(index, last))
+    tokens.push(JSON.stringify(text.slice(index, last)))
     let exp = match[1].trim();
-    tokens.push(`_s(${exp})`)
+    tokens.push(`${exp}`)
     last = index = last + match[0].length
   }
   if (last < text.length) {
     tokens.push(text.slice(0, last))
   }
+  tokens = tokens.filter(item=>item.trim()!=='')
   return tokens.join('+')
 
 }

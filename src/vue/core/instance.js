@@ -3,6 +3,7 @@ import {translateToAst} from '../compile/template-to-ast'
 import {translateTorender} from '../compile/ast-to-render'
 import Watcher from "./watcher";
 import Vue from "../index";
+import {createTextNode, createHtmlNode, createNormalNode} from '../vnode'
 
 export default function (Vue) {
   Vue.prototype.$nextTick = nextTick
@@ -15,33 +16,40 @@ export default function (Vue) {
     const ast = translateToAst(ele);
     const render = translateTorender(ast);
     const _render = function () {
-      render.call(vm)
+      return render.call(vm)
     }
     vm.$options._render = _render;
     const fn = function () {
-      vm._update(vm.$options._render())
+      let vnode = vm.$options._render();
+      console.log(vnode)
+      vm._update(vm.vnode, vnode);
+      vm.vnode = vnode
     }
     new Watcher(fn, this, false)
   }
 
 // for
-  Vue.prototype._f = function (lists,children) {
-    debugger
+  Vue.prototype._f = function (lists, children) {
+    return Object.keys(lists).map(key => {
+      if(!/^_/.test(key)){
+        return children(lists[key], key)
+      }
+    }).filter(_=>_)
   }
 
 
 //createElement
   Vue.prototype._c = function (tag, data, children) {
-    debugger
+    return createNormalNode(tag, data, children)
 
   }
 //createTextNode
   Vue.prototype._s = function (text) {
-    debugger
+    return createTextNode(text)
 
   }
   //html
-  Vue.prototype._h = function () {
-
+  Vue.prototype._h = function (html) {
+    return createHtmlNode(html)
   }
 }

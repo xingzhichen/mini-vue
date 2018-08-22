@@ -41,7 +41,7 @@ function processFor(ast) {
   let forInfo = ast.for
   // if (forInfo = ast.for && !ast.hasFor) {
   ast.hasFor = true
-  return `_f(${forInfo.for},(function(${forInfo.alias},${forInfo.iterator1},${forInfo.iterator2}){return${getRender(ast)}}))`
+  return `_f(${forInfo.for},(function(${forInfo.alias},${forInfo.iterator1},${forInfo.iterator2}){return ${getRender(ast)}}))`
   // }
 
 }
