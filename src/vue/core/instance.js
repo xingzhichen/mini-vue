@@ -2,13 +2,13 @@ import {nextTick} from '../utils'
 import {translateToAst} from '../compile/template-to-ast'
 import {translateTorender} from '../compile/ast-to-render'
 import Watcher from "./watcher";
-import Vue from "../index";
+import patch from './patch'
 import {createTextNode, createHtmlNode, createNormalNode} from '../vnode'
 
 export default function (Vue) {
   Vue.prototype.$nextTick = nextTick
-  Vue.prototype._update = function () {
-
+  Vue.prototype._update = function (oldVnode, newVnode, vm) {
+    patch(oldVnode, newVnode, vm)
   }
   Vue.prototype.$mount = function (el) {
     const vm = this;
@@ -22,7 +22,7 @@ export default function (Vue) {
     const fn = function () {
       let vnode = vm.$options._render();
       console.log(vnode)
-      vm._update(vm.vnode, vnode);
+      vm._update(vm.vnode, vnode, vm);
       vm.vnode = vnode
     }
     new Watcher(fn, this, false)
@@ -31,10 +31,10 @@ export default function (Vue) {
 // for
   Vue.prototype._f = function (lists, children) {
     return Object.keys(lists).map(key => {
-      if(!/^_/.test(key)){
+      if (!/^_/.test(key)) {
         return children(lists[key], key)
       }
-    }).filter(_=>_)
+    }).filter(_ => _)
   }
 
 

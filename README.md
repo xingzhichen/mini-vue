@@ -9,9 +9,10 @@
 3. watcher observe dep等
 4. ast
 5.render函数
+2. vdom
+
 
 待完成
-2. vdom
-3. diff
+3. patch
 
 
