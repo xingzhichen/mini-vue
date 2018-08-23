@@ -17,7 +17,7 @@ function getRender(ast) {
   if (ast.if && !ast.hasIf) {
     return processIf(ast)
   }
-  let children = genChildren(ast)
+  let children = `formatChildren(${genChildren(ast)})`
   return `_c(${JSON.stringify(ast.tagName)},${data ? data : {}},${children})`
 }
 
@@ -33,7 +33,7 @@ function genChildren(ast) {
       }
     }).join(',')
   }
-  return`[${children}]`
+  return `[${children}]`
 
 }
 
@@ -56,13 +56,13 @@ function processIf(ast) {
 }
 
 function genIf(conditions) {
-  if(!conditions.length){
+  if (!conditions.length) {
     return
   }
   let condition = conditions.shift() || {};
-  if(condition.exp){
+  if (condition.exp) {
     return `(${condition.exp })?${getRender(condition.block)}:${genIf(conditions)}`
-  }else {
+  } else {
     return getRender(condition.block)
   }
 
@@ -80,12 +80,12 @@ function getState(element) {
     data += `attrs:{${getAttr(element.attrs)}},`
   }
   if (element.prop) {
-    data+= `domProps:{${getAttr(element.prop)}},`
+    data += `domProps:{${getAttr(element.prop)}},`
   }
   if (element.events) {
     data += `on:${genHandler(element.events)}`
   }
-  return data.replace(/,$/, '')+ '}'
+  return data.replace(/,$/, '') + '}'
 
 }
 
@@ -97,14 +97,12 @@ function genDirectives(element, directives) {
   let res = 'directives:['
   directives.forEach(item => {
     if (item.name === 'text') {
-      addProp(element, 'textContent', `_s(${item.value})`)
+      addProp(element, 'textContent', `${item.value}`)
     } else if (item.name === 'html') {
-      addProp(element, 'innerHTML', `_h(${item.value})`)
+      addProp(element, 'innerHTML', `_${item.value}`)
     } else if (item.name === 'model') {
-      addProp(element, 'value', `(${value})`)
-      element.events.push({
-        ['change']: `function($event){value=$event.target.value}`
-      })
+      addProp(element, 'value', `(${item.value})`)
+      addEvent(element, 'input', `(function($event){${item.value}=$event.target.value})`)
 
     } else {
       res += `{name:"${item.name}",value:${item.value}},`
@@ -116,22 +114,26 @@ function genDirectives(element, directives) {
 function genHandler(events) {
   let obj = '{'
   Object.keys(events).forEach(key => {
-    obj = obj + `${ key}:`+genFunction(events[key]) +','
+    obj = obj + `${ key}:` + genFunction(events[key]) + ','
   })
-  return obj+'}'
+  return obj + '}'
 
 }
 
 function genFunction(handler) {
-    return `function($event){${handler}($event)}`
+  return `function($event){${handler}.call(this,$event)}`
 }
 
 function getAttr(arr) {
-  let res='';
+  let res = '';
 
-   arr.forEach(item => {
-     let key = Object.keys(item)[0]
+  arr.forEach(item => {
+    let key = Object.keys(item)[0]
     res += `"${key}":${item[key]},`
   })
   return res
+}
+
+function addEvent(element, key, value) {
+  (element.events || (element.events = {}))[key] = value;
 }

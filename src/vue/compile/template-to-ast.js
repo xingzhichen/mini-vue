@@ -1,10 +1,10 @@
 import options from './options'
 
 
-const startTagOpen = /^<([a-zA-Z_\-]+)/;
+const startTagOpen = /^<([a-zA-Z_0-9\-]+)/;
 const startTagClose = /^\s*(\/?)>/;
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]*)))?/;
-const endTag = /^<\/([a-zA-Z_\-]+)>/;
+const endTag = /^<\/([a-zA-Z_0-9\-]+)>/;
 const tagRE = /{{((.)+?)}}/g;
 const forRE = /([^]*?)\s+(?:in)\s+([^]*)/;
 const onRe = /^@|^v-on/;

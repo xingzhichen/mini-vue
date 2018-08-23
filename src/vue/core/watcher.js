@@ -48,10 +48,10 @@ export default class Watcher {
   update() {
     const vm = this.vm;
     if (this.isComputed) {
-      console.log('computed更新了');
+      // console.log('computed更新了');
       this.dep.notify();
     } else if (this.expression) {
-      console.log('watcher更新了:' + this.expression);
+      // console.log('watcher更新了:' + this.expression);
       let oldValue = this.value;
       let newValue = vm[this.expression]
       this.fn.call(vm, oldValue, newValue)

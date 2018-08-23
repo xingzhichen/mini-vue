@@ -52,4 +52,15 @@ export default function (Vue) {
   Vue.prototype._h = function (html) {
     return createHtmlNode(html)
   }
+  Vue.prototype.formatChildren = function (arr) {
+    let result = []
+    arr.forEach(item => {
+      if (item instanceof Array) {
+        result = result.concat(this.formatChildren(item))
+      } else {
+        result.push(item)
+      }
+    })
+    return result
+  }
 }

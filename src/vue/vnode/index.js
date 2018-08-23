@@ -6,7 +6,7 @@ export default class Vnode {
     this.children = children;
     this.text = text;
     this.html = html;
-    this.ele = ele;
+    this.dom = ele;
     this.context = context;
     this.key = data &&data.key
   }
